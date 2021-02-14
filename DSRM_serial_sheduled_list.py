@@ -2,11 +2,12 @@ import schedule
 import time
 import serial
 from datetime import datetime
+import requests
 
 #Read DSRM port P1
 #example type: sagemcom T211 3phase P1 type 5b (should also work for S211 single phase)
 
-
+savemye_url = 'http://192.168.1.230/savemye/api/store.php'
 
 ser = serial.Serial(
     port='/dev/ttyUSB0',
@@ -18,6 +19,12 @@ ser = serial.Serial(
     )
 
 telegram_codes  =[["1.7.0","Real time t1"],["2.7.0","Real time t2"],["96.14.0","Tarief"],["1.8.1","Energie verbruik t1"],["1.8.2","Energie verbruik t2"],["2.8.1","Energie injectie t1"],["2.8.2","Energie injectie t2"]]
+
+def store_url(sensor, description, value, metric, timestamp):
+    url = savemye_url
+    myobj = {'sensor' : sensor,'description': description, 'value':value, 'metric': metric, 'timestamp':timestamp}
+    x = requests.post(url, data = myobj)
+    print(x)
 
 def telegram(telegram_codes_record):
     for codes_teller in range(len(telegram_codes_record)):
@@ -34,21 +41,26 @@ def telegram(telegram_codes_record):
                 if ("*" in telegram_line):
                     stop_str = telegram_line.rfind("*")
                     telegram_value = telegram_line[start_str:stop_str]
-                    print("value="+ telegram_value, end=' ')
+                    #print("value="+ telegram_value, end=' ')
                     start_str = telegram_line.rfind("*")+1
                     stop_str = telegram_line.rfind(")")
                     telegram_metric = telegram_line[start_str:stop_str]
-                    print(" Metric=" + telegram_metric, end=' ')
+                    #print(" Metric=" + telegram_metric, end=' ')
                 else:
                     stop_str = telegram_line.rfind(")")
                     telegram_value = telegram_line[start_str:stop_str]
-                    print("value="+ telegram_value, end=' ')
+                    #print("value="+ telegram_value, end=' ')
                     telegram_metric = "none"
-                    print(" Metric=" + telegram_metric, end=' ')
-                print(telegram_codes_record[codes_teller][1], end=' ')
-                print(datetime.now())
+                    #print(" Metric=" + telegram_metric, end=' ')
+                
+                print("DSRM"+telegram_codes_record[codes_teller][0],telegram_codes_record[codes_teller][1]," Value=" + telegram_value,"timestamp=" + str(datetime.now()))
+                store_url(("DSRM"+telegram_codes_record[codes_teller][0]), telegram_codes_record[codes_teller][1],telegram_value, telegram_metric, datetime.now())
+                #return_str = ["dsrm",telegram_value,telegram_metric,datetime.now()]
+                
+                
 
 schedule.every(5).seconds.do(telegram, telegram_codes)
+
 #schedule.every().day.at("01:20").do(telegram)
 
 while True:
