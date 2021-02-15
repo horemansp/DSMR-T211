@@ -17,8 +17,10 @@ ser = serial.Serial(
     bytesize=serial.EIGHTBITS,
     timeout=1
     )
-
-telegram_codes  =[["1.7.0","Real time t1"],["2.7.0","Real time t2"],["96.14.0","Tarief"],["1.8.1","Energie verbruik t1"],["1.8.2","Energie verbruik t2"],["2.8.1","Energie injectie t1"],["2.8.2","Energie injectie t2"]]
+#telegram_codes_2 =[["1.7.0","Real time verbruik"],["2.7.0","Real time injectie"],["96.14.0","Tarief"],["1.8.1","Energie verbruik t1"],["1.8.2","Energie verbruik t2"],["2.8.1","Energie injectie t1"],["2.8.2","Energie injectie t2"]]
+telegram_codes  =[["1.7.0","Real time verbruik"],["2.7.0","Real time injectie"]]
+telegram_codes_2 =[["1.8.1","Energie verbruik hoog tarief"],["1.8.2","Energie verbruik laag tarief"],["2.8.1","Energie injectie hoog tarief"],
+                  ["2.8.2","Energie injectie laag tarief"]]
 
 def store_url(sensor, description, value, metric, timestamp):
     url = savemye_url
@@ -53,14 +55,14 @@ def telegram(telegram_codes_record):
                     telegram_metric = "none"
                     #print(" Metric=" + telegram_metric, end=' ')
                 
-                print("DSRM"+telegram_codes_record[codes_teller][0],telegram_codes_record[codes_teller][1]," Value=" + telegram_value,"timestamp=" + str(datetime.now()))
-                store_url(("DSRM"+telegram_codes_record[codes_teller][0]), telegram_codes_record[codes_teller][1],telegram_value, telegram_metric, datetime.now())
+                print("DSMR"+telegram_codes_record[codes_teller][0],telegram_codes_record[codes_teller][1]," Value=" + telegram_value,"timestamp=" + str(datetime.now()))
+                store_url(("DSMR"+telegram_codes_record[codes_teller][0]), telegram_codes_record[codes_teller][1],telegram_value, telegram_metric, datetime.now())
                 #return_str = ["dsrm",telegram_value,telegram_metric,datetime.now()]
                 
                 
 
-schedule.every(5).seconds.do(telegram, telegram_codes)
-
+schedule.every(15).seconds.do(telegram, telegram_codes)
+schedule.every(5).minutes.do(telegram, telegram_codes_2)
 #schedule.every().day.at("01:20").do(telegram)
 
 while True:
