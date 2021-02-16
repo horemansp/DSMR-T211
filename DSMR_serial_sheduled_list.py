@@ -23,10 +23,13 @@ telegram_codes_2 =[["1.8.1","Energie verbruik hoog tarief"],["1.8.2","Energie ve
                   ["2.8.2","Energie injectie laag tarief"]]
 
 def store_url(sensor, description, value, metric, timestamp):
-    url = savemye_url
-    myobj = {'sensor' : sensor,'description': description, 'value':value, 'metric': metric, 'timestamp':timestamp}
-    x = requests.post(url, data = myobj)
-    print(x)
+    try:
+        url = savemye_url
+        myobj = {'sensor' : sensor,'description': description, 'value':value, 'metric': metric, 'timestamp':timestamp}
+        x = requests.post(url, data = myobj)
+        print(x)
+    except request.RequestException as e:
+        print(e)
 
 def telegram(telegram_codes_record):
     for codes_teller in range(len(telegram_codes_record)):
