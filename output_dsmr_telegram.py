@@ -3,7 +3,7 @@ b'/FLU5\\253769484_A\r\n'
 b'\r\n'
 b'0-0:96.1.4(50213)\r\n' = serie nummer van een gekoppelde meter op het 4de kanaal
 b'0-0:96.1.1(3153414733313030313332383938)\r\n' = serienummer van gekoppelde meter op kanaal 1
-b'0-0:1.0.0(210207135629W)\r\n' = real time verbruik tarief 1
+b'0-0:1.0.0(210207135629W)\r\n' 
 b'1-0:1.8.1(000858.642*kWh)\r\n' = afname to hiertoe tarief 1
 b'1-0:1.8.2(001264.926*kWh)\r\n' = afname tot hiertoe tarief 2
 b'1-0:2.8.1(000421.788*kWh)\r\n' = injectie tot hiertoe tarief 1 (dag)
