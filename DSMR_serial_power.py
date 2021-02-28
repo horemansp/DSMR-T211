@@ -41,6 +41,9 @@ def store_url(sensor, description, value, metric, timestamp):
         print(e)
 
 def DSMR_rt_consumption():
+    value_consumption = 0.0
+    value_injection = 0.0
+    consumed = 0.0
     ser=ser_init()
     for teller in range(23):
         telegram_line=str(ser.readline())
@@ -53,11 +56,13 @@ def DSMR_rt_consumption():
             start_str = telegram_line.rfind("(")+1
             stop_str = telegram_line.rfind("*")
             value_consumption = float(telegram_line[start_str:stop_str])
+            print(value_consumption)
            
         if (telegram_code == "2.7.0"):
             start_str = telegram_line.rfind("(")+1
             stop_str = telegram_line.rfind("*")
             value_injection = float(telegram_line[start_str:stop_str])
+            print(value_injection)
            
     consumed = value_injection - value_consumption
   
