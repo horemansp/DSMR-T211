@@ -75,7 +75,7 @@ def telegram(telegram_codes_record):
                     if debug: print("DSMR"+telegram_codes_record[codes_teller][0],telegram_codes_record[codes_teller][1]," Value=" + telegram_value,"timestamp=" + str(datetime.now()))
                     store_url(("DSMR"+telegram_codes_record[codes_teller][0]), telegram_codes_record[codes_teller][1],telegram_value, telegram_metric, datetime.now())
      except:
-        print("Could not read from port",datetime.now())
+        print("Could not read from serial port",datetime.now())
 
 def DSMR_rt_consumption():
     value_consumption = 0.0
@@ -172,7 +172,7 @@ def Collect_Modbus_daily(Collect_Array):
         c.close()
         
     except:
-        print("Could not read from modbus")
+        print("Could not read from modbus",datetime.now())
         
 
 
